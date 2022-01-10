@@ -45,7 +45,21 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student login(String email, String password )throws SQLException {
-        Student student= studentRepository.findByEmailAndPassword(email,password);
+        
+         try {
+             
+             //created a new encoder and encode password received from UI
+             //Then pass the new variable with the encrypted password to
+             // the findemailandpassword method
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+           String encrypted_Password = passwordEncoder.encode(password);
+             Student student= studentRepository.findByEmailAndPassword(email,encrypted_Password);
+             
+        } catch (NullPointerException | IllegalArgumentException npe) {
+            System.out.println(password);
+            npe.printStackTrace();
+        }
+        
         return student;
     }
 
